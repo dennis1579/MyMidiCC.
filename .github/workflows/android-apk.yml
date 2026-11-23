@@ -25,6 +25,9 @@ jobs:
       - name: Verify Erica Synths DB-01 MIDI mapping
         run: python3 tests/test_db01_reference.py
 
+      - name: Test combined manufacturer and device-type filters
+        run: node tests/test_device_filters.cjs
+
       - name: Refresh offline web update manifest
         run: |
           python3 tools/generate_web_manifest.py

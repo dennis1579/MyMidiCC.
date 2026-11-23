@@ -17,7 +17,8 @@ main { width: min(1080px, 100% - 2rem); margin: 3rem auto; }
 header { padding: 1.5rem 0; border-top: 4px solid var(--accent); }
 h1 { margin: 0; font-size: clamp(2rem, 6vw, 4rem); line-height: 1.06; letter-spacing: -.055em; }
 h2 { margin: 0; font-size: clamp(1.25rem, 3vw, 1.6rem); }
-.controls { display: grid; grid-template-columns: 1.3fr 1fr auto; gap: 1rem; align-items: end; }
+.controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; align-items: end; }
+.device-count { margin: .7rem 0 0; color: var(--muted); font-size: .9rem; }
 label { display: grid; gap: .35rem; font-weight: 600; }
 select, input { min-width: 0; width: 100%; font: inherit; padding: .65rem .7rem; border: 1px solid var(--line); border-radius: .45rem; background: var(--panel); color: var(--text); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
@@ -48,6 +49,8 @@ td:nth-child(3), td:nth-child(4) { color: var(--muted); }
 <main>
   <header><h1>MIDI-CC Nachschlagewerk</h1></header>
   <div class="controls">
+    <label>Hersteller<select id="manufacturer"></select></label>
+    <label>Gerätetyp<select id="category"></select></label>
     <label>Gerät<select id="device"></select></label>
     <label>Suche<input id="search" type="search" placeholder="z. B. 74 oder Cutoff" autocomplete="off"></label>
     <label>MIDI-Typ<select id="kind">
@@ -56,6 +59,7 @@ td:nth-child(3), td:nth-child(4) { color: var(--muted); }
       <option value="NRPN">NRPN</option>
     </select></label>
   </div>
+  <p id="device-count" class="device-count" role="status"></p>
   <article>
     <h2 id="device-title"></h2>
     <p id="notes"></p>
@@ -74,6 +78,8 @@ td:nth-child(3), td:nth-child(4) { color: var(--muted); }
 const devices = [
   {
     name: "Erica Synths Bassline DB-01",
+    manufacturer: "Erica Synths",
+    category: "synth",
     notes: "MIDI IN: Das Erica-Synths-Handbuch dokumentiert Modulation Wheel, Pitch Bend, Noten und MIDI Clock. CC 1 ist der standardisierte Mod-Wheel-Controller; als Wirkung wird in Praxisberichten ein VCF-Cutoff-Offset genannt, aber dieser Parameter ist im offiziellen Handbuch nicht als eigener MIDI-CC-Eintrag bestätigt. Weitere Regler wie Resonanz, Drive und LFO sind dort nicht mit empfangbaren CC-Nummern dokumentiert. Pitch Bend ist eine eigene MIDI-Nachricht (kein CC). Für externe Noten den Keyboard-/Arpeggiator-Modus verwenden (SHIFT + PLAY bzw. SHIFT + ARPEGG), unter CONFIG → MIN MIDI-IN-Kanal einstellen; für eingehende MIDI Clock die Quelle CLK → MID wählen. Ab Firmware 1.07 lassen sich Patterns per MIDI Program Change (Bank/Program) wählen; das ist ebenfalls kein CC. Firmware 1.10 ergänzt die MIP-Einstellung für den Wechselzeitpunkt.",
     sources: [["Erica Synths · Offizielles DB-01-Handbuch, MIDI IN / CONFIG","https://www.ericasynths.lv/media/BASSLINE_DB-01_manual.pdf"],["Erica Synths · DB-01 Produktseite / Downloads / MIDI-Modus","https://www.ericasynths.lv/desktop-bassline-db-01-906/"],["Erica Synths · Firmware 1.07: Bank/Pattern über Program Change","https://www.ericasynths.lv/news/post/bassline-107"],["Erica Synths · Firmware 1.10: MIP-MIDI-Pattern-Umschaltung","https://www.ericasynths.lv/news/bassline-db-01-firmware-110/"],["Anwenderberichte · CC 1 / Filter-Cutoff-Offset (nicht Herstellerbestätigung)","https://www.reddit.com/r/synthesizers/comments/qkcp8u"]],
     rows: [
@@ -82,6 +88,8 @@ const devices = [
   },
   {
     name: "Erica Synths Xenodrive",
+    manufacturer: "Erica Synths",
+    category: "effect",
     notes: "Werkseinstellungen. Die CC-Zuordnungen lassen sich im MIDI-Menü ändern. Beim Scream-Schalter nennt die Tabelle nur Ein/Aus; sie spezifiziert dort keine numerischen Schaltwerte.",
     sources: [["Erica Synths · Xenodrive-Handbuch (EN), MIDI-Menü und Standardbelegung","https://www.ericasynths.lv/service/file/download/product_id/1552/file_id/611/"],["Erica Synths · Produktseite mit Handbuch-Downloads","https://www.ericasynths.lv/xenodrive-3589/"]],
     rows: [
@@ -103,6 +111,8 @@ const devices = [
   },
   {
     name: "Strymon BigSky (Original)",
+    manufacturer: "Strymon",
+    category: "effect",
     notes: "Im Global-Menü MIDI CC einschalten. Presets werden per Program Change aufgerufen. CC 0 wählt davor die Preset-Bank. Param 1 und Param 2 folgen der Belegung des jeweiligen Presets.",
     sources: [["Strymon · BigSky User Manual Rev. D, MIDI Specification (S. 23)","https://www.strymon.net/manuals/BigSky_UserManual_RevD.pdf#page=23"]],
     rows: [
@@ -169,6 +179,8 @@ const devices = [
   },
   {
     name: "Korg MS2000 / MS2000R",
+    manufacturer: "Korg",
+    category: "synth",
     notes: "Werkseitige Panel-Zuordnung und weitere dokumentierte Controller. Die Belegung ist unter Global 5A änderbar. Sound-Parameter folgen dem Timbre-Kanal, Effekte dem globalen Kanal. Arpeggiator-Parameter werden per NRPN editiert. Korg dokumentiert dafür CC 99 und 98 zur Auswahl sowie CC 6 für den Wert. MIDI-Dumps verwenden SysEx.",
     sources: [["Korg · MS2000/MS2000R Owner’s Manual, MIDI (S. 60–66) und Implementation Chart (S. 77)","https://cdn.korg.com/us/support/download/files/93ef013a4a9c51824c71c2cf4b6a7f52.pdf#page=65"]],
     rows: [
@@ -227,6 +239,8 @@ const devices = [
   },
   {
     name: "Novation Peak",
+    manufacturer: "Novation",
+    category: "synth",
     notes: "CC-Paare bestehen aus zwei Controllern (MSB : LSB). Viele Menüparameter wie Voice Mode und Mod Matrix verwenden NRPN. Patch-Import ist per SysEx möglich.",
     sources: [["Novation · Peak Appendix, MIDI Parameters List","https://userguides.novationmusic.com/hc/en-gb/articles/25494651392146-Peak-appendix"]],
     rows: [
@@ -463,6 +477,8 @@ const devices = [
   },
   {
     name: "Novation Bass Station II",
+    manufacturer: "Novation",
+    category: "synth",
     notes: "CC-Paare sind als MSB : LSB angegeben. Die Wellenformen von Oszillator 1 und 2 verwenden NRPN. AFX-Overlays verwenden SysEx. Der als „mod“ geführte Eintrag (CC 0 im Novation-Anhang) bleibt wegen der unklaren Angabe offen.",
     sources: [["Novation · Bass Station II Appendix, MIDI Parameters List und AFX Mode SysEx Support","https://userguides.novationmusic.com/hc/en-gb/articles/25494271270930-Bass-Station-II-appendix"]],
     rows: [
@@ -563,6 +579,8 @@ const devices = [
   },
   {
     name: "Waldorf Blofeld",
+    manufacturer: "Waldorf",
+    category: "synth",
     notes: "Für eingehende CCs Ctrl Receive im Global-Menü aktivieren. Ein Stern kennzeichnet temporäre Controller und Steuerbefehle. Die SysEx-Spezifikation dokumentiert unter anderem Parameteränderungen und Dumps.",
     sources: [["Waldorf · Offizieller Handbuch-Download","https://downloads.waldorfmusic.com/cloud/index.php/s/32zdTsdYcRSX9eE"],["Waldorf · User’s Manual, Controller Numbers (S. 113–117, Händlerkopie)","https://files.kraftmusic.com/media/ownersmanual/Waldorf_Blofeld_Users_Manual.pdf#page=113"],["Waldorf · Blofeld SysEx v1.04","https://downloads.waldorfmusic.com/cloud/index.php/s/ybExJgT4TzqT8ir"]],
     rows: [
@@ -686,6 +704,8 @@ const devices = [
   },
   {
     name: "Korg volca kick",
+    manufacturer: "Korg",
+    category: "synth",
     notes: "Für die Steuerung von außen im Global-Menü „MIDI RX ShortMessage“ aktivieren.",
     sources: [["Korg · volca kick MIDI Implementation Chart","https://cdn.korg.com/us/support/download/files/6ccaa99d5343b89209b19c07f47e3b0f.pdf"]],
     rows: [
@@ -703,6 +723,8 @@ const devices = [
   },
   {
     name: "Behringer Neutron",
+    manufacturer: "Behringer",
+    category: "synth",
     notes: "Das Modulationsrad lässt sich als Quelle für den Patch-Ausgang ASSIGN wählen. Analoge Klangregler wie Filter Cutoff haben laut MIDI-Tabelle keine direkte CC-Zuweisung. Diverse Geräteeinstellungen, etwa Envelope Retriggering, sind per SysEx dokumentiert.",
     sources: [["Behringer · Neutron User Manual, Appendix A (S. 27–28)","https://cdn-media.empowertribe.com/0d95ee35b64c44228976b051e288bf37/NEUTRON_M_EN.pdf#page=27"]],
     rows: [
@@ -712,6 +734,8 @@ const devices = [
   },
   {
     name: "Behringer PRO VS MINI",
+    manufacturer: "Behringer",
+    category: "synth",
     notes: "Im MIDI-Menü den CC-Empfang aktivieren. Der Quick Start Guide führt sowohl CC 117 als auch 118 als „Voice C Coarse Tuning“. Die genaue Zuordnung von CC 118 bleibt offen.",
     sources: [["Behringer · PRO VS MINI Quick Start Guide, MIDI CC-Tabelle","https://mediadl.musictribe.com/media/PLM/data/docs/0722-ABF/QSG_BE_0722-ABF_PRO%20VS%20MINI_WW.pdf"],["Behringer · Quick Start Guide (Händlerkopie, S. 76–77)","https://images.static-thomann.de/pics/atg/atgdata/document/manual/571632_qsg_be_0722_abf_pro_vs_mini_ww.pdf#page=39"]],
     rows: [
@@ -748,6 +772,8 @@ const devices = [
   },
   {
     name: "Roland JX-3P (Original)",
+    manufacturer: "Roland",
+    category: "synth",
     notes: "Die serienmäßige MIDI-Implementierung dokumentiert Hold sowie zwei Kanalmodus-Befehle. Für Klangparameter wie Filter Cutoff sind dort keine CCs dokumentiert. Program Change und Pitch Bend sind separat dokumentiert. MIDI-Nachrüstungen können einen anderen Funktionsumfang haben.",
     sources: [["Roland · JX-3P Owner’s Manual","https://static.roland.com/assets/media/pdf/JX-3P_OM.pdf"],["Roland · JX-3P Service Notes, MIDI Implementation (Archivkopie)","https://seriescircuits.com/wp-content/uploads/2023/12/Roland-JX-3P-PG-200-Service-Manual.pdf"]],
     rows: [
@@ -758,6 +784,8 @@ const devices = [
   },
   {
     name: "Roland MC-707",
+    manufacturer: "Roland",
+    category: "groovebox",
     notes: "Die Tabelle listet eingehende CCs laut Roland MIDI Implementation Chart v1.60. Für FILTER, MOD und FX sind die Standardnummern 80, 81 und 82. Der Chart kennzeichnet SOUND (83) als MC-101-Kompatibilität. Scenes und Clips werden per Program Change angewählt. SysEx-Empfang ist im Chart als nicht unterstützt markiert.",
     sources: [["Roland · MC-707 MIDI Implementation Chart v1.60","https://static.roland.com/assets/media/pdf/MC-707_MIDIImpleChart_eng03_W.pdf"],["Roland Support · Externe Steuerung der FILTER-, MOD- und FX-Regler","https://support.roland.com/hc/en-us/articles/360038852252-MC-707-Can-I-use-external-MIDI-messages-to-control-the-values-of-knobs-FILTER-MOD-FX"]],
     rows: [
@@ -797,6 +825,8 @@ const devices = [
   },
   {
     name: "Roland JD-08",
+    manufacturer: "Roland",
+    category: "synth",
     notes: "Roland Boutique JD-08 (MIDI-Implementation Part v1.00): CC-Empfang über den eingestellten MIDI-Kanal von Part A (CH.A) oder Part B (CH.B), nicht über den Systemkanal (CH). Filter Cutoff = CC 3, Resonanz = CC 9. CC 68–71 (Tone Palette A–D) sind nur Sendung (TX) und deshalb nicht als steuerbare CCs gelistet. CC 120/121/123–126 sind Kanalmodus-Befehle, keine Klangparameter. Keine NRPN oder 14-Bit-CC-Paare dokumentiert. Die Sequencer-Option CC: ON aktiviert die Ausgabe von Panel-CCs, nicht die hier aufgelistete Empfangsbelegung.",
     sources: [["Roland · JD-08 Reference Manual, MIDI Implementation Chart (Part)","https://static.roland.com/manuals/jd-08_reference/eng/17812001.html"],["Roland · JD-08 Reference Manual, MIDI Settings (Part A/B und Systemkanal)","https://static.roland.com/manuals/jd-08_reference/eng/17812003.html"],["Roland · JD-08 Reference Manual, Sequencer-CC-Einstellung (Ausgabe)","https://static.roland.com/manuals/jd-08_reference/eng/17812070.html"]],
     rows: [
@@ -891,6 +921,8 @@ const devices = [
   },
   {
     name: "Elektron Digitone (Original)",
+    manufacturer: "Elektron",
+    category: "synth",
     notes: "Tabelle aus dem Handbuch für OS 1.41. Manche Nummern haben je nach Bereich unterschiedliche Funktionen. NRPN wird als MSB : LSB angezeigt, beispielsweise bei den Ratio Offsets. CC-Paare wie 16:48 sind für höher aufgelöste Parameter dokumentiert. Projekte, Patterns und Sounds können per SysEx übertragen werden.",
     sources: [["Elektron · Digitone User Manual OS 1.41, Anhang B (S. 95–98)","https://elektron.se/wp-content/uploads/2024/09/Digitone_User_Manual_ENG_OS1.41_231108.pdf#page=95"]],
     rows: [
@@ -1131,6 +1163,8 @@ const devices = [
   },
   {
     name: "Elektron Digitakt (Original)",
+    manufacturer: "Elektron",
+    category: "sampler",
     notes: "Tabelle aus dem Handbuch für OS 1.52A. Die Zielspur und der Bereich bestimmen die Funktion. CC 74 steuert etwa die Filterfrequenz einer Audiospur oder VAL5 einer MIDI-Spur. LFO Depth verwendet CC-Paare (109:61 und 119:63). NRPN-Zuordnungen stehen im MIDI-Typfilter. SysEx-Dumps übertragen Projekte, Patterns und Sounds.",
     sources: [["Elektron · Digitakt User Manual OS 1.52A, Anhang B (S. 88–91)","https://www.elektron.se/wp-content/uploads/2025/07/Digitakt-User-Manual_ENG_OS1.52A_250708.pdf#page=88"]],
     rows: [
@@ -1326,6 +1360,8 @@ const devices = [
   },
   {
     name: "Korg modwave / mkII / module",
+    manufacturer: "Korg",
+    category: "synth",
     notes: "Die Standardnummern für Scale Select und Mod Knobs lassen sich unter UTILITY → MIDI CC Assign ändern. Andere geeignete CCs können in der Modulationsmatrix als Quelle dienen. Das Handbuch dokumentiert SysEx für Kaoss Physics und universelle Systembefehle. Der MIDI-Chart führt CC 123–127 im Abschnitt All Notes Off auf.",
     sources: [["Korg · Gemeinsames Owner’s Manual, MIDI CC Assign und MIDI Implementation Chart","https://cdn.korg.com/us/support/download/files/ce74895461b034d5319d23c8d1cf227f.pdf"]],
     rows: [
@@ -1350,6 +1386,8 @@ const devices = [
   },
   {
     name: "Elektron Octatrack MKII",
+    manufacturer: "Elektron",
+    category: "sampler",
     notes: "Referenz für MKII mit OS 1.40A. Audiotrack-Kanäle werden unter PROJECT → MIDI → CHANNELS konfiguriert. Die Zeilen „MIDI-Modus“ gelten am Auto Channel bei deaktiviertem CC DIRECT CONNECT. Die CC-Slots 1–10 leiten gemäß CTRL 1/2 SETUP an frei gewählte Ziel-CCs weiter. Die Funktion der Playback- und FX-Parameter hängt von der Machine bzw. dem Effekt ab.",
     sources: [["Elektron · Octatrack MKII User Manual OS 1.40A, Anhang C.7–C.8 (S. 139–142)","https://www.elektron.se/wp-content/uploads/2024/09/Octatrack-MKII-User-Manual_ENG_OS1.40A_210414.pdf#page=139"]],
     rows: [
@@ -1455,6 +1493,9 @@ const devices = [
   }
 ];
 
+const manufacturer = document.getElementById('manufacturer');
+const category = document.getElementById('category');
+const deviceCount = document.getElementById('device-count');
 const device = document.getElementById('device');
 const search = document.getElementById('search');
 const kind = document.getElementById('kind');
@@ -1463,7 +1504,58 @@ const range = document.getElementById('range');
 const sources = document.getElementById('sources');
 const status = document.getElementById('status');
 
-devices.forEach(({ name }, index) => device.add(new Option(name, index)));
+// These two filters are coupled: each dropdown only offers values that
+// are possible given the other filter. Original indices keep the MIDI lookup
+// and its parameter search independent of any category sorting.
+const typeLabels = {
+  synth: 'Synthesizer',
+  effect: 'Effekt',
+  groovebox: 'Groovebox',
+  sampler: 'Sampler / Drumcomputer'
+};
+
+function updateDeviceFilters(changed = '') {
+  let maker = manufacturer.value;
+  let type = category.value;
+
+  // Keep the filter the user just changed, resetting the other only when
+  // their combination is invalid (e.g. Erica Synths + Sampler).
+  if (changed === 'manufacturer' && type &&
+      !devices.some(item => item.manufacturer === maker && item.category === type)) {
+    type = '';
+  }
+  if (changed === 'category' && maker &&
+      !devices.some(item => item.manufacturer === maker && item.category === type)) {
+    maker = '';
+  }
+
+  const makers = [...new Set(devices
+    .filter(item => !type || item.category === type)
+    .map(item => item.manufacturer))].sort((a, b) => a.localeCompare(b, 'de'));
+  const types = new Set(devices
+    .filter(item => !maker || item.manufacturer === maker)
+    .map(item => item.category));
+
+  manufacturer.replaceChildren(new Option('Alle Hersteller', ''),
+    ...makers.map(name => new Option(name, name)));
+  manufacturer.value = maker;
+  category.replaceChildren(new Option('Alle Gerätetypen', ''),
+    ...Object.entries(typeLabels)
+      .filter(([key]) => types.has(key))
+      .map(([key, label]) => new Option(label, key)));
+  category.value = type;
+
+  const previousDevice = device.value;
+  const matches = devices.map((item, index) => ({ item, index }))
+    .filter(({ item }) => (!maker || item.manufacturer === maker) &&
+      (!type || item.category === type));
+  device.replaceChildren(...matches.map(({ item, index }) =>
+    new Option(item.name, String(index))));
+  device.value = matches.some(({ index }) => String(index) === previousDevice)
+    ? previousDevice : String(matches[0].index);
+  deviceCount.textContent = `${matches.length} von ${devices.length} Geräten auswählbar`;
+  renderDevice();
+}
 
 function renderDevice() {
   const selected = devices[Number(device.value)];
@@ -1522,10 +1614,12 @@ function renderRows() {
     : 'Keine Treffer.';
 }
 
+manufacturer.addEventListener('change', () => updateDeviceFilters('manufacturer'));
+category.addEventListener('change', () => updateDeviceFilters('category'));
 device.addEventListener('change', renderDevice);
 kind.addEventListener('change', renderRows);
 search.addEventListener('input', renderRows);
-renderDevice();
+updateDeviceFilters();
 </script>
 </body>
 </html>

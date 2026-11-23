@@ -41,3 +41,7 @@ The JD-08 entry is based on Roland's official [MIDI Implementation Chart (Part)]
 ### Erica Synths Bassline DB-01
 
 Added the official DB-01 MIDI-IN capabilities from [Erica Synths' manual](https://www.ericasynths.lv/media/BASSLINE_DB-01_manual.pdf). Only **Modulation Wheel (CC 1)** is listed as an explicitly supported incoming controller; its commonly reported VCF-cutoff-offset action is labeled **user-reported, not manufacturer-verified**. Pitch Bend (not CC), MIDI Clock and Note On/Off are explained in the device notes, as are the CONFIG MIDI-IN channel, keyboard/arpeggiator mode and the firmware 1.07 Program Change pattern selection. No unverified CC numbers for resonance, drive or other knobs have been invented. Regression test: `python3 tests/test_db01_reference.py`. Hardware response and the effect of CC 1 remain untested.
+
+### Kombinierte Gerätefilter (Hersteller + Gerätetyp)
+
+Die HTML-Oberfläche filtert jetzt die Geräteliste gleichzeitig nach **Hersteller** und **Gerätetyp**. Dropdowns sind miteinander verzahnt: nur zum jeweils anderen Filter passende Optionen werden angeboten. Die Typen umfassen **Synthesizer** (inkl. volca kick als Drum-Synth), **Effekt** (Xenodrive, BigSky), **Groovebox** (MC-707) und **Sampler / Drumcomputer** (Digitakt, Octatrack). Die Suchfunktion für CC, CC-Paare und NRPN bleibt unverändert. Der Filterzustand ist nur während der aktuellen Sitzung aktiv, die komplette HTML-Tabelle bleibt offline verfügbar. Regressionstest: `node tests/test_device_filters.cjs`.
