@@ -22,6 +22,9 @@ jobs:
       - name: Verify Roland JD-08 MIDI mapping and offline HTML
         run: python3 tests/test_jd08_reference.py
 
+      - name: Verify Erica Synths DB-01 MIDI mapping
+        run: python3 tests/test_db01_reference.py
+
       - name: Refresh offline web update manifest
         run: |
           python3 tools/generate_web_manifest.py

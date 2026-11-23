@@ -24,4 +24,4 @@ assert "https://static.roland.com/manuals/jd-08_reference/eng/17812001.html" in 
 assert "Systemkanal" in section and "CH.A" in section and "CH.B" in section
 assert html.count('name: "') >= 16
 assert "<script>" in html and "</script>" in html
-print("PASS: Roland JD-08, 81 part CCs + 6 channel-mode CCs; 16 devices")
+print("PASS: Roland JD-08, 81 part CCs + 6 channel-mode CCs; 17 devices")

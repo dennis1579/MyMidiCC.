@@ -73,6 +73,14 @@ td:nth-child(3), td:nth-child(4) { color: var(--muted); }
 <script>
 const devices = [
   {
+    name: "Erica Synths Bassline DB-01",
+    notes: "MIDI IN: Das Erica-Synths-Handbuch dokumentiert Modulation Wheel, Pitch Bend, Noten und MIDI Clock. CC 1 ist der standardisierte Mod-Wheel-Controller; als Wirkung wird in Praxisberichten ein VCF-Cutoff-Offset genannt, aber dieser Parameter ist im offiziellen Handbuch nicht als eigener MIDI-CC-Eintrag bestätigt. Weitere Regler wie Resonanz, Drive und LFO sind dort nicht mit empfangbaren CC-Nummern dokumentiert. Pitch Bend ist eine eigene MIDI-Nachricht (kein CC). Für externe Noten den Keyboard-/Arpeggiator-Modus verwenden (SHIFT + PLAY bzw. SHIFT + ARPEGG), unter CONFIG → MIN MIDI-IN-Kanal einstellen; für eingehende MIDI Clock die Quelle CLK → MID wählen. Ab Firmware 1.07 lassen sich Patterns per MIDI Program Change (Bank/Program) wählen; das ist ebenfalls kein CC. Firmware 1.10 ergänzt die MIP-Einstellung für den Wechselzeitpunkt.",
+    sources: [["Erica Synths · Offizielles DB-01-Handbuch, MIDI IN / CONFIG","https://www.ericasynths.lv/media/BASSLINE_DB-01_manual.pdf"],["Erica Synths · DB-01 Produktseite / Downloads / MIDI-Modus","https://www.ericasynths.lv/desktop-bassline-db-01-906/"],["Erica Synths · Firmware 1.07: Bank/Pattern über Program Change","https://www.ericasynths.lv/news/post/bassline-107"],["Erica Synths · Firmware 1.10: MIP-MIDI-Pattern-Umschaltung","https://www.ericasynths.lv/news/bassline-db-01-firmware-110/"],["Anwenderberichte · CC 1 / Filter-Cutoff-Offset (nicht Herstellerbestätigung)","https://www.reddit.com/r/synthesizers/comments/qkcp8u"]],
+    rows: [
+      ["1","Modulation Wheel (laut Praxis: VCF-Cutoff-Offset)","CC","0–127"]
+    ]
+  },
+  {
     name: "Erica Synths Xenodrive",
     notes: "Werkseinstellungen. Die CC-Zuordnungen lassen sich im MIDI-Menü ändern. Beim Scream-Schalter nennt die Tabelle nur Ein/Aus; sie spezifiziert dort keine numerischen Schaltwerte.",
     sources: [["Erica Synths · Xenodrive-Handbuch (EN), MIDI-Menü und Standardbelegung","https://www.ericasynths.lv/service/file/download/product_id/1552/file_id/611/"],["Erica Synths · Produktseite mit Handbuch-Downloads","https://www.ericasynths.lv/xenodrive-3589/"]],

@@ -11,7 +11,7 @@ Private-use Android app for a user-supplied MIDI-CC HTML page. The app contains 
 
 ## Current status
 
-**Original HTML imported:** `web/index.html` now contains the complete user-uploaded *MIDI-CC Nachschlagewerk* with 16 devices, search, CC pairs and NRPN entries. The HTML/CSS/JS is self-contained and the reference tables work offline. Manufacturer links open the browser and require internet. Native MIDI is not required for this read-only reference; Android hardware testing remains open.
+**Original HTML imported:** `web/index.html` now contains the complete user-uploaded *MIDI-CC Nachschlagewerk* with 17 devices, search, CC pairs and NRPN entries. The HTML/CSS/JS is self-contained and the reference tables work offline. Manufacturer links open the browser and require internet. Native MIDI is not required for this read-only reference; Android hardware testing remains open.
 
 ## Install on Android
 
@@ -37,3 +37,7 @@ This repository is **public**. Do not commit private presets, account details or
 ### Roland JD-08
 
 The JD-08 entry is based on Roland's official [MIDI Implementation Chart (Part)](https://static.roland.com/manuals/jd-08_reference/eng/17812001.html) and [MIDI Settings](https://static.roland.com/manuals/jd-08_reference/eng/17812003.html). The chart lists 81 received part CCs plus six received channel-mode commands (87 rows). Transmit-only Tone Palette CC 68–71 are intentionally excluded. The firmware's System MIDI channel does not recognize CC; send to the MIDI channel selected for Part A or B. The JD-08 does not document CC pairs/NRPN in this MIDI chart.
+
+### Erica Synths Bassline DB-01
+
+Added the official DB-01 MIDI-IN capabilities from [Erica Synths' manual](https://www.ericasynths.lv/media/BASSLINE_DB-01_manual.pdf). Only **Modulation Wheel (CC 1)** is listed as an explicitly supported incoming controller; its commonly reported VCF-cutoff-offset action is labeled **user-reported, not manufacturer-verified**. Pitch Bend (not CC), MIDI Clock and Note On/Off are explained in the device notes, as are the CONFIG MIDI-IN channel, keyboard/arpeggiator mode and the firmware 1.07 Program Change pattern selection. No unverified CC numbers for resonance, drive or other knobs have been invented. Regression test: `python3 tests/test_db01_reference.py`. Hardware response and the effect of CC 1 remain untested.
