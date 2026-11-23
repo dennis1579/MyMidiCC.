@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Original nuspective mark from user's MidiMapper logo.svg. -->
+    <group android:translateX="17.5" android:translateY="17.5">
+        <path android:fillColor="#1CB8DB"
+            android:pathData="M7.292,7.33 L7.292,43.481 L15.154,43.481 L15.154,14.666 L21.443,14.666 L34.02,23.571 L34.02,38.242 L41.881,43.481 L41.881,19.905 L24.062,7.33 Z" />
+        <path android:fillColor="#FFFFFF"
+            android:pathData="M56.071,56.955 L56.071,19.903 L48.067,19.903 L48.067,49.438 L42.197,49.438 L28.856,40.31 L28.856,25.274 L20.851,19.903 L20.851,44.069 L39.528,56.955 Z" />
+    </group>
+</vector>

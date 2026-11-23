@@ -1,0 +1,14 @@
+# Gradle / Android Studio
+.gradle/
+build/
+**/build/
+.local/
+.idea/
+*.iml
+local.properties
+.cxx/
+captures/
+.DS_Store
+*.jks
+*.keystore
+# never publish signing material
