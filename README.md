@@ -11,7 +11,7 @@ Private-use Android app for a user-supplied MIDI-CC HTML page. The app contains 
 
 ## Current status
 
-**Original HTML imported:** `web/index.html` now contains the complete user-uploaded *MIDI-CC Nachschlagewerk* with 15 devices, search, CC pairs and NRPN entries. The HTML/CSS/JS is self-contained and the reference tables work offline. Manufacturer links open the browser and require internet. Native MIDI is not required for this read-only reference; Android hardware testing remains open.
+**Original HTML imported:** `web/index.html` now contains the complete user-uploaded *MIDI-CC Nachschlagewerk* with 16 devices, search, CC pairs and NRPN entries. The HTML/CSS/JS is self-contained and the reference tables work offline. Manufacturer links open the browser and require internet. Native MIDI is not required for this read-only reference; Android hardware testing remains open.
 
 ## Install on Android
 
@@ -33,3 +33,7 @@ For full architecture and APK-build notes, see [Android documentation](docs/ANDR
 The GitHub repository itself is currently named **`MyMidiCC.`** (with a trailing period), because that is the name actually created on GitHub. The Android app is named **MyMidiCC** (without a period). Its remote update URL includes that repository period. If you rename the GitHub repository, update `UPDATE_BASE` in `MainActivity.java` and rebuild the APK once.
 
 This repository is **public**. Do not commit private presets, account details or API keys.
+
+### Roland JD-08
+
+The JD-08 entry is based on Roland's official [MIDI Implementation Chart (Part)](https://static.roland.com/manuals/jd-08_reference/eng/17812001.html) and [MIDI Settings](https://static.roland.com/manuals/jd-08_reference/eng/17812003.html). The chart lists 81 received part CCs plus six received channel-mode commands (87 rows). Transmit-only Tone Palette CC 68–71 are intentionally excluded. The firmware's System MIDI channel does not recognize CC; send to the MIDI channel selected for Part A or B. The JD-08 does not document CC pairs/NRPN in this MIDI chart.

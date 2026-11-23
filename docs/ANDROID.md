@@ -25,4 +25,8 @@ Die App stellt **keine JavaScript-Bridge in das Android-System** zur Verfügung.
 
 ### Noch offen
 
-Die originale `index.html` wurde aus dem Chat-Upload nach `web/index.html` übernommen (MIDI-CC-Nachschlagewerk mit 15 Geräten, Filter/Suche, CC-Paaren und NRPN). HTML, CSS und JavaScript sind in einer Datei enthalten und offline nutzbar. Externe Herstellerlinks benötigen Internet und öffnen den Browser. Offen: Test der Darstellung, Suche und Offline-Updates auf echter Android-Hardware. iOS wird nicht mitgebaut.
+Die originale `index.html` wurde aus dem Chat-Upload nach `web/index.html` übernommen (MIDI-CC-Nachschlagewerk mit 16 Geräten, Filter/Suche, CC-Paaren und NRPN). HTML, CSS und JavaScript sind in einer Datei enthalten und offline nutzbar. Externe Herstellerlinks benötigen Internet und öffnen den Browser. Offen: Test der Darstellung, Suche und Offline-Updates auf echter Android-Hardware. iOS wird nicht mitgebaut.
+
+### JD-08 (Roland, 23.11.2026)
+
+Nachtrag zum MIDI-CC-Nachschlagewerk anhand der offiziellen Roland-Referenz: 81 empfangbare Part-CCs und sechs zusätzliche empfangbare Kanalmodus-Kommandos; Tone Palette CC 68–71 sind lediglich TX (kein Empfang) und fehlen deshalb bewusst als auswählbare Ziel-CCs. Wichtig: CC 3 (TVF Cutoff), CC 9 (TVF Resonance), Part A/B Kanäle statt System-CH. Keine NRPN oder 14-Bit-Paare im Chart dokumentiert. Originalquellen direkt im Gerätedatensatz verlinkt. Test: `python3 tests/test_jd08_reference.py`; Android-Build über GitHub Actions. Praxistest an realem JD-08 bleibt offen.

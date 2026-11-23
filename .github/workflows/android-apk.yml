@@ -19,6 +19,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Verify Roland JD-08 MIDI mapping and offline HTML
+        run: python3 tests/test_jd08_reference.py
+
       - name: Refresh offline web update manifest
         run: |
           python3 tools/generate_web_manifest.py
