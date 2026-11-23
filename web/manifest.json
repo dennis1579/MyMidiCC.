@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "files": [
+    {
+      "path": "assets/nuspective-mark.svg",
+      "sha256": "976c0f92fd921b6237573d36290a727bbf6fa488390c4a016859142343d3c3f2"
+    },
+    {
+      "path": "index.html",
+      "sha256": "e9fde626afcddac95cfe0f7a498e1db8a43362e41de55e84bd7b11775734f928"
+    }
+  ]
+}
