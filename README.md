@@ -11,7 +11,7 @@ Private-use Android app for a user-supplied MIDI-CC HTML page. The app contains 
 
 ## Current status
 
-**Scaffold only:** The original file `C:\Users\dennis1579\Documents\ChatGPT\AnlogJoystickMidiLooper\index.html` is not yet accessible from this conversation or GitHub. Thus `web/index.html` is an **honestly marked placeholder**, not the user's MIDI-CC interface. Upload the original `index.html` and any relative assets into `web/` to complete the actual interface. The app uses no native MIDI API currently; browser-specific functions require testing and possibly a native bridge.
+**Original HTML imported:** `web/index.html` now contains the complete user-uploaded *MIDI-CC Nachschlagewerk* with 15 devices, search, CC pairs and NRPN entries. The HTML/CSS/JS is self-contained and the reference tables work offline. Manufacturer links open the browser and require internet. Native MIDI is not required for this read-only reference; Android hardware testing remains open.
 
 ## Install on Android
 

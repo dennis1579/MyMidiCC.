@@ -25,4 +25,4 @@ Die App stellt **keine JavaScript-Bridge in das Android-System** zur Verfügung.
 
 ### Noch offen
 
-Die originale Windows-Datei \`C:\\Users\\dennis1579\\Documents\\ChatGPT\\AnlogJoystickMidiLooper\\index.html\` ist bisher nicht verfügbar. \`web/index.html\` ist daher ausdrücklich eine Platzhalter-/Einrichtungsseite; sie soll durch die echte Datei ersetzt werden. Danach ist auf dem Android-Gerät zu prüfen, ob die HTML-Funktionen, Darstellung und verwendeten Browser-APIs im WebView korrekt laufen. iOS wird nicht mitgebaut.
+Die originale `index.html` wurde aus dem Chat-Upload nach `web/index.html` übernommen (MIDI-CC-Nachschlagewerk mit 15 Geräten, Filter/Suche, CC-Paaren und NRPN). HTML, CSS und JavaScript sind in einer Datei enthalten und offline nutzbar. Externe Herstellerlinks benötigen Internet und öffnen den Browser. Offen: Test der Darstellung, Suche und Offline-Updates auf echter Android-Hardware. iOS wird nicht mitgebaut.
